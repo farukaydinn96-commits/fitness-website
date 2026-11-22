@@ -1,69 +1,77 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { calculateOneRepMax, calculatePlatesPerSide, clampNumber } from '../utils/calculators';
 
-const OneRepMaxCalc = () => {
-  const [weight, setWeight] = useState("");
-  const [reps, setReps] = useState("");
-  const [maxWeight, setMaxWeight] = useState(null);
+export default function OneRepMaxCalc({ t }) {
+  const [weightInput, setWeightInput] = useState('100');
+  const [repsInput, setRepsInput] = useState('5');
 
-  const calculate1RM = (e) => {
-    e.preventDefault();
-    if (weight > 0 && reps > 0) {
-      const calculatedMax = weight * (1 + reps / 30);
-      setMaxWeight(calculatedMax.toFixed(1));
-    }
-  };
+  const safeWeight = clampNumber(weightInput, 20, 400, 100);
+  const safeReps = clampNumber(repsInput, 1, 20, 5);
+  const stats = calculateOneRepMax(safeWeight, safeReps);
+  const plates = calculatePlatesPerSide(safeWeight, 20);
 
   return (
-    <div className="calculator-card">
-      <h3 style={{ color: "var(--primary-orange)", marginTop: 0 }}>
-        🏋️‍♂️ 1RM Hesaplayıcı
-      </h3>
-      <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>
-        Tek seferde kaldırabileceğin maksimum ağırlığı bul.
-      </p>
+    <div className="fc-card" style={{ marginTop: 18 }}>
+      <div className="fc-card-head">
+        <span className="fc-card-title">{t.oneRmTitle}</span>
+        <span className="fc-badge">EPLEY FORMULA</span>
+      </div>
 
-      <form onSubmit={calculate1RM} className="calc-form">
-        <div className="input-group">
-          <label>Kaldırılan Ağırlık (kg)</label>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+        <div>
+          <label className="fc-label">{t.liftWeightLbl}</label>
           <input
-            type="number"
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
-            placeholder="Örn: 80"
-            required
-            min="1"
+            type="text"
+            inputMode="decimal"
+            className="fc-input"
+            value={weightInput}
+            onChange={(e) => setWeightInput(e.target.value)}
+            onBlur={() => setWeightInput(String(clampNumber(weightInput, 20, 400, 100)))}
           />
         </div>
-        <div className="input-group">
-          <label>Tekrar Sayısı</label>
+        <div>
+          <label className="fc-label">{t.liftRepsLbl}</label>
           <input
-            type="number"
-            value={reps}
-            onChange={(e) => setReps(e.target.value)}
-            placeholder="Örn: 8"
-            required
-            min="1"
-            max="30"
+            type="text"
+            inputMode="numeric"
+            className="fc-input"
+            value={repsInput}
+            onChange={(e) => setRepsInput(e.target.value)}
+            onBlur={() => setRepsInput(String(Math.round(clampNumber(repsInput, 1, 20, 5))))}
           />
         </div>
-        <button type="submit" className="calc-btn">
-          Hesapla
-        </button>
-      </form>
+      </div>
 
-      {maxWeight && (
-        <div className="calc-result">
-          <p>Tahmini Maksimum Ağırlığın:</p>
-          <h2>
-            {maxWeight}{" "}
-            <span style={{ fontSize: "18px", color: "var(--text-muted)" }}>
-              kg
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 14 }}>
+        <div className="fc-macro-box">
+          <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{t.estOneRm}</div>
+          <div className="fc-macro-val">{stats.oneRm}</div>
+          <div style={{ fontSize: 11 }}>kg</div>
+        </div>
+        <div className="fc-macro-box">
+          <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>85% (HYPERTROPHY)</div>
+          <div className="fc-macro-val">{stats.eightyFive}</div>
+          <div style={{ fontSize: 11 }}>kg</div>
+        </div>
+        <div className="fc-macro-box">
+          <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>75% (VOLUME)</div>
+          <div className="fc-macro-val">{stats.seventyFive}</div>
+          <div style={{ fontSize: 11 }}>kg</div>
+        </div>
+      </div>
+
+      <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 6 }}>{t.platesPerSideLbl}</div>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        {plates.length === 0 ? (
+          <span className="fc-badge">EMPTY 20KG BAR</span>
+        ) : (
+          plates.map((p, idx) => (
+            <span key={idx} className="fc-badge">
+              {p} kg
             </span>
-          </h2>
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   );
-};
-
-export default OneRepMaxCalc;
+}

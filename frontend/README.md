@@ -1,16 +1,22 @@
-# React + Vite
+# FITCORE — Strength & Conditioning Web Toolkit (Portfolio Demo)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+- **Live Demo:** [farukaydinn96-commits.github.io/fitness-website](https://farukaydinn96-commits.github.io/fitness-website/)
+- **Repository:** [github.com/farukaydinn96-commits/fitness-website](https://github.com/farukaydinn96-commits/fitness-website)
 
-Currently, two official plugins are available:
+FITCORE is a single-page fitness and personal-coaching portfolio demo built with React and Vite. All coaching tiers and transformation case studies are clearly labeled as illustrative demo content.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Date-Keyed Workout Log & Drift-Free Rest Timer:** Logs completed sets per `YYYY-MM-DD` date with a timestamp-based (`Date.now()`) countdown timer and Web Audio completion chime.
+- **Epley 1RM & Olympic Barbell Plate Calculator:** Computes estimated 1-rep max, working weight percentages (85% / 75%), and per-side plate loading on a 20 kg bar.
+- **Mifflin-St Jeor TDEE & Macro Calculator:** Validated inputs (sex, age, height, weight, activity multiplier, goal) with safe minimum calorie bounds and non-medical disclaimer.
+- **Web Audio Focus Synthesizer:** Generates royalty-free rhythmic BPM pulses and ambient focus tones directly in the browser without external MP3 hotlinks.
+- **Real Calendar 28-Day Habit Log & URL Hash Routing:** Persists state via a custom `useLocalStorage` hook, syncs tabs with `window.location.hash`, and supports side-by-side EN/TR localization.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Run & Test Locally
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```bash
+npm install
+npm test
+npm run dev
+```
